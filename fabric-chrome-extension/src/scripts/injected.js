@@ -1,93 +1,89 @@
+
 // Will be injected into the webpage from contentScript.js
 class fabricController  {
-    constructor () {
+    constructor () { 
         this.info = "Hyperledger Fabric Extension";
-        this.peer;
-    }
-    async get(id) {
-        const response = await fetch(`http://localhost:8000/get/${id}`);
-        const body = await response.json();
-        return body.value;
     }
     async getTransaction(id) {
-        const response = await fetch(`http://localhost:8000/transaction/${id}`);
-        const body = await response.json();
-        return body;
+        let requestPayload = {
+            id: id,
+        };
+        // Sending message to contentScript.js:
+        let result = await this.sendMessage('getTransaction', requestPayload);
+        return result.response;
     }
     async submitTransactionProposal(request) {
         try {
-            const response = await fetch('http://localhost:8000/submitTransactionProposal', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(request)
-            });
-            const peerResponse = await response.json();
-            console.log('peer response: ', peerResponse);
-            return peerResponse;
+            let requestPayload = {
+                request: request,
+            };
+            let result = await this.sendMessage('submitTransactionProposal', requestPayload);
+            return result.response;
         } catch (error) {
             console.log('Could not submit transaction proposal ERROR::', error);
         } 
     }
 
-    async submitSignedProposal(signedRequest) {
-        console.log('signed request: ', signedRequest); 
+    async submitSignedProposal(signedRequestPayload) {
+        console.log('(json) signed request: ', signedRequestPayload); 
         try {
             let requestPayload = {
-                signedRequest: {
-                    proposalResponses: signedRequest[0],
-                    proposal: signedRequest[1]
-                },
-                tx_id: signedRequest[2],
-                peerURL: 'grpc://localhost:7051',
-                ordererURL: 'grpc://localhost:7050'
+                signedRequest: signedRequestPayload.proposalRequest,
+                tx_id: signedRequestPayload.tx_id,
             };
-            console.log('real : ', requestPayload);
-            const response = await fetch('http://localhost:8000/submitSignedProposal', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestPayload)
-            });
-            const FinalTransactionResponse = await response.json();
-            console.log('FinalTransactionResponse: ', FinalTransactionResponse);
-            return FinalTransactionResponse;
+            let result = await this.sendMessage('submitSignedProposal', requestPayload);
+            console.log('signed result: ', result);
+            return result;
         } catch (error) {
             console.log('Could not submit transaction ERROR::', error);
         } 
     }
 
-    async autoSubmitTransaction(id, value) { // Convience function to automatically send transaction & signed proposal
+    async autoSubmitTransaction(request) { // Convience function to automatically send transaction & signed proposal
+        let requestPayload = {
+            request: request,
+        }; 
         try {
-            const response = await fetch('http://localhost:8000/submitTransaction', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({'id': id, 'value': value})
-            });
-            const content = await response.json();
-            return content;
+            let result = await this.sendMessage('autoSubmitTransaction', requestPayload);
+            return result.response;
         } catch (error) {
             console.log('Could not find item ERROR::', error);
         }
         
     }
+
+    async queryLedger(request) {
+        let requestPayload = {
+            request: request,
+        }; 
+        try {
+            let result = await this.sendMessage('queryLedger', requestPayload);
+            return result.response;
+        } catch (error) {
+            console.log('Could not find item ERROR::', error);
+        }
+    }
+    async sendMessage(function_name, payload) {
+        let message = { 
+            type: 'webpage', 
+            function: function_name,
+            payload: payload	
+        }
+        window.postMessage(message, '*');
+        // Listen to messages from contentScript.js:
+        const readMessage = () => new Promise(resolve => window.addEventListener('message', (event) => {
+            if (event.data.type === "background") resolve(event.data); 
+        }));
+        let result = await readMessage();
+        return result;
+    }
     
 }
 let fabricInterface = new fabricController();
 
-// Listen to messages from contentScript.js 
-window.addEventListener('message', (event) => {
-    if ((event.source === window) && event.data.type && (event.data.type == "content_script")) {
-        if (event.data.peerURL) {
-            fabricInterface.peer = event.data.peerURL;
-            console.log('Peer url: ', fabricInterface.peer);
-        }
-    }
-});
+
+
+
+
+
+

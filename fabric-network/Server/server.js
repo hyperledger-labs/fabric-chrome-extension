@@ -14,14 +14,6 @@ var path          = require('path');
 var util          = require('util');
 var os            = require('os');
 
-// Load all of our middleware
-// configure app to use bodyParser()
-// this will let us get the data from a POST
-// app.use(express.static(__dirname + '/client'));
-
-// app.use(bodyParser.urlencoded({ extended: true }));
-
-
 var app = express();
 
 app.use((req, res, next) => {
