@@ -2,9 +2,20 @@
 <div>
 	<body></body>
 		<h1>Hyperledger Extension</h1>
-		<form id="peer_url_form">
+	
+		Network url:<br>
+		<input id="network_url_input">
+		<button id='network_url_button'>set</button>
+		<button id='network_reset_button'>Reset Network settings</button>
+			<br><br>
+			
+		<form id="network_url_form">
+			Orderer url:<br>
+			<input type="text" id="orderer_url_input" >
+			<br><br>
+
 			Peer url:<br>
-			<input type="text" id="peer_url" >
+			<input type="text" id="peer_url_input" >
 			<br><br>
 			<input type="submit" value="Submit">
 		</form> 

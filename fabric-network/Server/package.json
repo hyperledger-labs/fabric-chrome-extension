@@ -1,16 +1,18 @@
 {
-    "name": "Fabric-tuna-app",
+    "name": "Fabric-app",
     "version": "1.0.0",
     "description": "Hyperledger Fabric MOOC Sample Application",
     "main": "server.js",
     "dependencies": {
-        "angular": "^1.4.3",
+        "atob": "^2.1.1",
         "body-parser": "latest",
+        "btoa": "^1.2.1",
+        "bytebuffer": "^5.0.1",
         "ejs": "latest",
         "express": "latest",
         "fabric-ca-client": "^1.0.2",
         "fabric-client": "1.2.0",
-        "grpc": "^1.6.0"
+        "grpc": "^1.13.0"
     },
     "license": "Apache-2.0",
     "keywords": [
