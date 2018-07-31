@@ -70,7 +70,7 @@ Organizations:
             - Host: peer0.org1.example.com
               Port: 7051
 
- - &Org2
+    - &Org2
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
         Name: Org2MSP
