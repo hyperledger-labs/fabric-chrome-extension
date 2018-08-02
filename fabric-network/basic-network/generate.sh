@@ -33,8 +33,15 @@ if [ "$?" -ne 0 ]; then
   exit 1
 fi
 
-# generate anchor peer transaction
+# generate anchor peer transaction for Org1
 configtxgen -profile OneOrgChannel -outputAnchorPeersUpdate ./config/Org1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org1MSP
+if [ "$?" -ne 0 ]; then
+  echo "Failed to generate anchor peer update for Org1MSP..."
+  exit 1
+fi
+
+# generate anchor peer transaction for Org2
+configtxgen -profile OneOrgChannel -outputAnchorPeersUpdate ./config/Org2MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org2MSP
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate anchor peer update for Org1MSP..."
   exit 1
