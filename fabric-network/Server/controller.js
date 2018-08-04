@@ -23,6 +23,7 @@ return {
 				discover: true, 
 				asLocalhost: true //! After deployment switch to false
 			});
+			console.log(discovery_response);
 			let peers = discovery_response.peers_by_org.Org1MSP.peers.map((peer) => 
 					'grpc://localhost:' + peer.endpoint.split(':')[1]
 			);
