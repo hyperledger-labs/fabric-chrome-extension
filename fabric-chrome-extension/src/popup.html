@@ -1,24 +1,37 @@
 <!doctype html>
 <div>
-	<body></body>
+		<head>
+				<link rel="stylesheet" href="./styles/popup.css">
+			 </head>
+	<body>
+	<div>
 		<h1>Hyperledger Extension</h1>
-	
-		Network url:<br>
+		
+		<br>Network url:<br>
 		<input id="network_url_input">
 		<button id='network_url_button'>set</button>
-		<button id='network_reset_button'>Reset Network settings</button>
+	   <button id='network_reset_button'>Reset Network settings</button>
+		  
+		<p>Adding Peers:</p>
+		<ul class="peer_list">      
+		  </ul>
+		  
+		</div>
+		
+		 <p>Add new peer:</p>
+		
+		peer url:
+			<input type="text" id="peer_url_input" >
+		<button id='add_peer_button'>+</button>
 			<br><br>
-			
-		<form id="network_url_form">
-			Orderer url:<br>
+		
+		Orderer url:
 			<input type="text" id="orderer_url_input" >
 			<br><br>
-
-			Peer url:<br>
-			<input type="text" id="peer_url_input" >
-			<br><br>
-			<input type="submit" value="Submit">
-		</form> 
-		<script src="./scripts/popup.js"></script>
+		<button id='submit_network_button'>Save network settings</button>
+	  </div>
+	  
+	  <script src="./scripts/jquery-3.3.1.min.js"></script>
+	  <script src="./scripts/popup.js"></script>
 	</body>
 </div>
