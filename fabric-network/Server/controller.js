@@ -51,9 +51,7 @@ return {
 		connect_to_fabric: async (ordererURL, peerURL) => { 
 			let fabric_client = new Fabric_Client();
 			let channel = fabric_client.newChannel('mychannel');
-			console.log('peerURL: ', peerURL);
 			peerURL.map((peer) => {
-				console.log('peer: ', peer);
 				channel.addPeer(fabric_client.newPeer(peer));
 			});
 
@@ -352,7 +350,7 @@ return {
 		
 			console.log("Query has completed, checking results");
 			// query_responses could have more than one  results if there multiple peers were used as targets
-			if (query_responses && query_responses.length == 1) {
+			if (query_responses && query_responses.length >= 1) {
 				if (query_responses[0] instanceof Error) {
 					console.error("error from query = ", query_responses[0]);
 					res.send("Could not locate item");
