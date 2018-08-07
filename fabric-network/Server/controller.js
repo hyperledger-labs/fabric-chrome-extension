@@ -15,25 +15,31 @@ return {
 		* @returns {obj} {orderers: [], peers: []}
 		*/
 		getNetwork: async (req,res) => { 
-			let anchorPeerURL = 'grpc://localhost:7051'; // Hard coded anchor peer
-			let connection_array = await module.exports.connect_to_fabric(null, anchorPeerURL);
+			let anchorPeers = ['grpc://localhost:9051','grpc://localhost:7051']; // Hard coded anchor peer
+			let connection_array = await module.exports.connect_to_fabric(null, anchorPeers);
 			let channel = connection_array[0];
 			// Get network endpoints: 
 			let discovery_response = await channel.initialize({
 				discover: true, 
 				asLocalhost: true //! After deployment switch to false
 			});
-			let peers = discovery_response.peers_by_org.Org1MSP.peers.map((peer) => 
-					'grpc://localhost:' + peer.endpoint.split(':')[1]
-			);
+			// console.log(channel);
+			// let peers = discovery_response.peers_by_org.Org1MSP.peers.map((peer) => 
+			// 		'grpc://localhost:' + peer.endpoint.split(':')[1]
+			// );
 			let orderers = discovery_response.orderers.OrdererMSP.endpoints.map((orderer) => 
 					'grpc://localhost:' + orderer.port
 			);
-			let networkEndpoint = {
+			// let networkEndpoint = {
+			// 	orderers: orderers,
+			// 	peers: peers,
+			// }
+			let fake_connection_response = {
 				orderers: orderers,
-				peers: peers,
+				peers: anchorPeers,
 			}
-			res.send(networkEndpoint);
+			//TODO: Fix Service Discovery:
+			res.send(fake_connection_response);
 		},
 
 		/** 
@@ -45,8 +51,10 @@ return {
 		connect_to_fabric: async (ordererURL, peerURL) => { 
 			let fabric_client = new Fabric_Client();
 			let channel = fabric_client.newChannel('mychannel');
-			let peer = fabric_client.newPeer(peerURL);
-			channel.addPeer(peer);
+			peerURL.map((peer) => {
+				channel.addPeer(fabric_client.newPeer(peer));
+			});
+
 			if (ordererURL) { // Adding orderer is not always required (ex. queryingLedger).
 				let orderer = fabric_client.newOrderer(ordererURL)
 				channel.addOrderer(orderer);
@@ -342,7 +350,7 @@ return {
 		
 			console.log("Query has completed, checking results");
 			// query_responses could have more than one  results if there multiple peers were used as targets
-			if (query_responses && query_responses.length == 1) {
+			if (query_responses && query_responses.length >= 1) {
 				if (query_responses[0] instanceof Error) {
 					console.error("error from query = ", query_responses[0]);
 					res.send("Could not locate item");

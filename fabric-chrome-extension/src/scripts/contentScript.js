@@ -6,20 +6,6 @@
 		script.remove();
 	};
 	
-	// Listen to popup.js messages
-	chrome.runtime.onMessage.addListener((request) => {
-		if (request.networkURL && request.peerURL && request.ordererURL) {
-			chrome.storage.sync.set({
-				networkConfig: {
-					networkURL: request.networkURL, 
-					ordererURL: request.ordererURL,
-					peerURL: request.peerURL
-				}
-			}, () => {
-				console.log('Stored Network Configurations');
-			});
-		}
-	});
 
 	// Listen to to injected.js then send => background.js
 	window.addEventListener("message", (event) => {

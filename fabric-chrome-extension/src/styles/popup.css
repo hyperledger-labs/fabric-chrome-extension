@@ -1,0 +1,8 @@
+.peer {
+    color: grey;
+  }
+  
+  .peer:hover { 
+    color: red;
+    text-decoration: line-through;
+  }
