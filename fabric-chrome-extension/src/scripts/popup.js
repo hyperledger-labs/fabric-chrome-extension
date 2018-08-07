@@ -14,7 +14,6 @@ document.getElementById('submit_network_button').addEventListener("click",
 // Load stored network configurations to form.
 try {
     chrome.storage.sync.get(['networkConfig'], (results) => {
-        console.log(results.networkConfig);
         if (typeof results.networkConfig.networkURL !== undefined) {
             $('#network_url_input').val(results.networkConfig.networkURL);
             $('#orderer_url_input').val(results.networkConfig.ordererURL);

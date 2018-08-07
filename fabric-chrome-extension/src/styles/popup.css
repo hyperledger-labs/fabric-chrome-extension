@@ -3,6 +3,6 @@
   }
   
   .peer:hover { 
-     color: red;
-       text-decoration: line-through;
+    color: red;
+    text-decoration: line-through;
   }
