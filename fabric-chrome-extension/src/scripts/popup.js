@@ -1,3 +1,30 @@
+document.getElementById('network_url_button').addEventListener("click", 
+    (event) => { getNetworkEndpoints() });
+
+
+document.getElementById('network_reset_button').addEventListener("click", 
+    (event) => { clearNetworkConfigStorage() }); 
+
+document.getElementById('add_peer_button').addEventListener("click", 
+    (event) => { submitPeer() }); 
+
+document.getElementById('submit_network_button').addEventListener("click", 
+    (event) => { submitNetworkConfig() }); 
+
+// Load stored network configurations to form.
+try {
+    chrome.storage.sync.get(['networkConfig'], (results) => {
+        console.log(results.networkConfig);
+        if (typeof results.networkConfig.networkURL !== undefined) {
+            $('#network_url_input').val(results.networkConfig.networkURL);
+            $('#orderer_url_input').val(results.networkConfig.ordererURL);
+            results.networkConfig.peerURL.map((peer) => prependPeer(peer));
+        } 
+    });
+} catch (error) {
+    console.log('error with loading persisted settings');
+}
+
 const getNetworkEndpoints = async() => {
         try { //http://localhost:8000
             let networkURL = document.getElementById('network_url_input').value;
@@ -40,13 +67,15 @@ const submitNetworkConfig = () => {
         peerURL.push(selected_peers);
         });
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-            let message = {
-                networkURL: networkURL,
-                ordererURL: ordererURL,
-                peerURL: peerURL
-            };
-            // Send peerURL to contentScript.js
-            chrome.tabs.sendMessage(tabs[0].id, message);
+            chrome.storage.sync.set({
+				networkConfig: {
+					networkURL: networkURL, 
+					ordererURL: ordererURL,
+					peerURL: peerURL
+				}
+			}, () => {
+				console.log('Stored Network Configurations');
+			});
         });
     } catch (error) {
         console.log('Error with submitting network from: ', error);
@@ -64,32 +93,7 @@ const clearNetworkConfigStorage = () => {
     });
 }
 
-document.getElementById('network_url_button').addEventListener("click", 
-    (event) => { getNetworkEndpoints() });
 
-
-document.getElementById('network_reset_button').addEventListener("click", 
-    (event) => { clearNetworkConfigStorage() }); 
-
-document.getElementById('add_peer_button').addEventListener("click", 
-    (event) => { submitPeer() }); 
-
-document.getElementById('submit_network_button').addEventListener("click", 
-    (event) => { submitNetworkConfig() }); 
-
-// Load stored network configurations to form.
-try {
-    chrome.storage.sync.get(['networkConfig'], (results) => {
-        console.log(results.networkConfig);
-        if (typeof results.networkConfig.networkURL !== undefined) {
-            document.getElementById('network_url_input').value = results.networkConfig.networkURL;
-            document.getElementById('peer_url_input').value = results.networkConfig.peerURL;
-            document.getElementById('orderer_url_input').value = results.networkConfig.ordererURL;
-        } 
-    });
-} catch (error) {
-    console.log('error with loading persisted settings');
-}
 
 
 
