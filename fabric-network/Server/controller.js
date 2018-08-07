@@ -45,13 +45,13 @@ return {
 		/** 
 		* Returns Channel (with configured peer) and fabric client.
 		* @param {string} ordererURL can pass in null if no orderer is needed
-		* @param {string} peerURL
+		* @param {string} peerURLs
 		* @returns [Channel, fabric_client]
 		*/
-		connect_to_fabric: async (ordererURL, peerURL) => { 
+		connect_to_fabric: async (ordererURL, peerURLs) => { 
 			let fabric_client = new Fabric_Client();
 			let channel = fabric_client.newChannel('mychannel');
-			peerURL.map((peer) => {
+			peerURLs.map((peer) => {
 				channel.addPeer(fabric_client.newPeer(peer));
 			});
 
@@ -88,18 +88,18 @@ return {
 		/** 
 		* Returns Transaction object given id.
 		* @param {string} transaction_id 'req.params.id'
-		* @param {string} peerURL        'req.body.peerURL'
+		* @param {string} peerURLs        'req.body.peerURLs'
 		* @param {string} ordererURL     'req.body.orderer'
 		* @returns {obj} transaction_query 
 		*/
 		getTransaction: async (req, res) => { 
 			let transaction_id = req.params.id;
 			let ordererURL = req.params.ordererURL;
-			let peerURL = req.params.peerURL;
-			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURL);
+			let peerURLs = req.params.peerURLs;
+			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURLs);
 			let channel = connection_array[0];
 			//TODO: Making a new peer target seems redundant. 
-			let peer = connection_array[1].newPeer(peerURL); 
+			let peer = connection_array[1].newPeer(peerURLs); 
 			try {
 				let transaction_query = await channel.queryTransaction(transaction_id, peer);
 				res.send(transaction_query);
@@ -113,15 +113,15 @@ return {
 		* User submits transaction to be signed by peers.
 		* TODO: Add orderer and peer url parameters
 		* @param {object} request    'req.body.request'
-		* @param {string} peerURL    'req.body.peerURL'
+		* @param {string} peerURLs    'req.body.peerURLs'
 		* @param {string} ordererURL 'req.body.orderer'
 		* @returns {obj}
 		*/
 		submitTransactionProposal: async (req, res) => {
 			const request = req.body.request;
 			const ordererURL = req.body.ordererURL;
-			const peerURL = req.body.peerURL;
-			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURL);
+			const peerURLs = req.body.peerURLs;
+			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURLs);
 			let channel = connection_array[0];
 			let fabric_client = connection_array[1];
 			let tx_id = fabric_client.newTransactionID();
@@ -169,7 +169,7 @@ return {
 		* along with specified network configurations. Returns transation status
 		* @param {object} signedRequest 'req.body.signedRequest'
 		* @param {object} tx_id         'req.body.tx_id'
-		* @param {string} peerURL       'req.body.peerURL'
+		* @param {string} peerURLs       'req.body.peerURLs'
 		* @param {string} ordererURL    'req.body.ordererURL'
 		*/
 		submitSignedProposal: async (req, res) => {
@@ -177,9 +177,9 @@ return {
 			const signedRequest = req.body.signedRequest;
 			const tx_id = req.body.tx_id;
 			const ordererURL = req.body.ordererURL;
-			const peerURL = req.body.peerURL;
+			const peerURLs = req.body.peerURLs;
 
-			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURL);
+			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURLs);
 			let channel = connection_array[0];
 			let fabric_client = connection_array[1];
 			
@@ -211,15 +211,15 @@ return {
 		* Convenency function to submit request to endorsers, then submit peer response to orderer.
 		* TODO: get rid of below code, and use below abstracted methods
 		* @param {object} request    'req.body.request'
-		* @param {string} peerURL    'req.body.peerURL'
+		* @param {string} peerURLs    'req.body.peerURLs'
 		* @param {string} ordererURL 'req.body.orderer'
 		* @returns {obj}
 		*/
 		autoSubmitTransaction: async (req, res) => {  
 			const request = req.body.request;
 			const ordererURL = req.body.ordererURL;
-			const peerURL = req.body.peerURL;
-			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURL);
+			const peerURLs = req.body.peerURLs;
+			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURLs);
 			let channel = connection_array[0];
 			let fabric_client = connection_array[1];
 			let tx_id = fabric_client.newTransactionID();
@@ -326,15 +326,15 @@ return {
 		/** 
 		* Send key to Query Ledger
 		* @param   {object} request       'req.body.request'
-		* @param   {string} peerURL       'req.body.peerURL'
+		* @param   {string} peerURLs       'req.body.peerURLs'
 		* @param   {string} ordererURL    'req.body.ordererURL'
 		* @returns {string} value 
 		*/
 		queryLedger: async (req, res) => {
 			const request = req.body.request;
 			const ordererURL = req.body.ordererURL;
-			const peerURL = req.body.peerURL;
-			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURL);
+			const peerURLs = req.body.peerURLs;
+			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURLs);
 			let channel = connection_array[0];
 			let fabric_client = connection_array[1];
 
