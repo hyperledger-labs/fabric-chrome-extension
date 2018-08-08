@@ -6,11 +6,8 @@ module.exports = (app) => {
   app.get('/network', (req, res) => {
     controller.getNetwork(req, res);
   });
-  app.get('/transaction/:id/:ordererURL/:peerURL', (req, res) => {
+  app.post('/getTransaction', (req, res) => {
     controller.getTransaction(req, res);
-  });
-  app.get('/get/:id', (req, res) => {
-    controller.get(req, res);
   });
   app.post('/autoSubmitTransaction', (req, res) => {
     controller.autoSubmitTransaction(req, res);
