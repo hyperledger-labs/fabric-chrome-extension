@@ -93,15 +93,13 @@ return {
 		* @returns {obj} transaction_query 
 		*/
 		getTransaction: async (req, res) => { 
-			let transaction_id = req.params.id;
-			let ordererURL = req.params.ordererURL;
-			let peerURLs = req.params.peerURLs;
+			const transaction_id = req.body.id;
+			const ordererURL = req.body.ordererURL;
+			const peerURLs = req.body.peerURLs;
 			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURLs);
 			let channel = connection_array[0];
-			//TODO: Making a new peer target seems redundant. 
-			let peer = connection_array[1].newPeer(peerURLs); 
 			try {
-				let transaction_query = await channel.queryTransaction(transaction_id, peer);
+				let transaction_query = await channel.queryTransaction(transaction_id);
 				res.send(transaction_query);
 			} catch (error) {
 				console.log('error: ', error);
