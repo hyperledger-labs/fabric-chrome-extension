@@ -18,8 +18,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 tabId: tab.id,
                 type: 'popup',
                 focused: true,
-                height: 200, 
-                width: 200,
+                height: 312, 
+                width: 268,
                 left: 1100
             });
         });
