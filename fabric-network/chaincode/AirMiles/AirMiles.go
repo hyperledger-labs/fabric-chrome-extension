@@ -18,8 +18,8 @@ import (
 	"github.com/hyperledger/fabric/protos/peer"
 )
 
-// SampleChaincode implements a simple chaincode to manage an asset
-type SampleChaincode struct {
+// AirlineMilesChaincode implements a simple chaincode to manage an asset
+type AirlineMilesChaincode struct {
 }
 
 type user struct {
@@ -36,14 +36,14 @@ type flight struct {
 
 // Init is called during chaincode instantiation to initialize
 // data. We'll be adding more in this function later on.
-func (t *SampleChaincode) Init(stub shim.ChaincodeStubInterface) peer.Response {
+func (t *AirlineMilesChaincode) Init(stub shim.ChaincodeStubInterface) peer.Response {
 	return shim.Success(nil)
 }
 
 // Invoke is called per transaction on the chaincode. Each transaction is
 // either a 'get' or a 'set' on the asset created by Init function. The Set
 // method may create a new asset by specifying a new key-value pair.
-func (t *SampleChaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
+func (t *AirlineMilesChaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 	// Extract the function and args from the transaction proposal
 	fn, args := stub.GetFunctionAndParameters()
 
@@ -74,8 +74,8 @@ func initLedger(stub shim.ChaincodeStubInterface) (string, error) {
 	users := map[string]user{}
 	flights := map[string]flight{}
 
-	users["user1"] = user{
-		Name:         "user1",
+	users["Daniel"] = user{
+		Name:         "Daniel",
 		AirlineMiles: 2000,
 		Flights:      map[string]flight{},
 	}
@@ -117,7 +117,7 @@ func queryUser(stub shim.ChaincodeStubInterface, args []string) (string, error) 
 	if selectedUserAsBytes == nil {
 		return "", fmt.Errorf("Asset not found: %s", args[0])
 	}
-	return string(selectedUserAsBytes), nil //! Return shim.success?
+	return string(selectedUserAsBytes), nil
 }
 
 // Get returns the value of the specified asset key
@@ -177,7 +177,7 @@ func addUser(stub shim.ChaincodeStubInterface, args []string) (string, error) {
 
 // main function starts up the chaincode in the container during instantiate
 func main() {
-	err := shim.Start(new(SampleChaincode))
+	err := shim.Start(new(AirlineMilesChaincode))
 	if err != nil {
 		fmt.Println("Could not start Airline Mile Chaincode")
 	} else {
