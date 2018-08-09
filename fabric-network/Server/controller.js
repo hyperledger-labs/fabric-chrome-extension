@@ -18,18 +18,20 @@ return {
 			let anchorPeers = ['grpc://localhost:9051','grpc://localhost:7051']; // Hard coded anchor peer
 			let connection_array = await module.exports.connect_to_fabric(null, anchorPeers);
 			let channel = connection_array[0];
-			// Get network endpoints: 
-			let discovery_response = await channel.initialize({
-				discover: true, 
-				asLocalhost: true //! After deployment switch to false
-			});
+			//! Get network endpoints: 
+			// let discovery_response = await channel.initialize({
+			// 	discover: true, 
+			// 	asLocalhost: true //! After deployment switch to false
+			// });
+
 			// console.log(channel);
 			// let peers = discovery_response.peers_by_org.Org1MSP.peers.map((peer) => 
 			// 		'grpc://localhost:' + peer.endpoint.split(':')[1]
 			// );
-			let orderers = discovery_response.orderers.OrdererMSP.endpoints.map((orderer) => 
-					'grpc://localhost:' + orderer.port
-			);
+			// let orderers = discovery_response.orderers.OrdererMSP.endpoints.map((orderer) => 
+			// 		'grpc://localhost:' + orderer.port
+			// );
+			let orderers = ['grpc://localhost:7050'];
 			// let networkEndpoint = {
 			// 	orderers: orderers,
 			// 	peers: peers,
