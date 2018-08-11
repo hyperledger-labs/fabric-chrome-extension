@@ -11,15 +11,27 @@
     </div>
 
       <div class="fabric-test-box">
-        <p>Test querying the ledger:</p>
-        <form id="query" onsubmit='queryLedger();return false;'>
-          Key:<br>
-          <input type="text" id="query_key_input">
+        <p>Test querying users:</p>
+        <form id="query-user" onsubmit='queryUser();return false;'>
+          User Name:<br>
+          <input type="text" id="query-user-input">
+          <br><br>
+          <input type="submit" value="Submit">
+        </form> 
+        <p>User Info: </p>
+        <p id="query-user-response"></p>
+      </div>
+
+      <div class="fabric-test-box">
+        <p>Test querying flights:</p>
+        <form id="query" onsubmit='queryFlight();return false;'>
+          Flight Id:<br>
+          <input type="text" id="query-flight-input">
           <br><br>
           <input type="submit" value="Submit">
         </form> 
         <p>Value: </p>
-        <p id="queryResponse"></p>
+        <p id="query-flight-response"></p>
       </div>
 
       <div class="fabric-test-box">
@@ -50,6 +62,21 @@
         </form> 
         <p>Transaction ID: </p>
         <p id="AutoTransactionResponse"></p>
+      </div>
+
+      <div class="fabric-test-box">
+        <p>Purchase flight:</p>
+        <form id="set" onsubmit='purchaseFlight();return false;'>
+          User Name:<br>
+          <input type="text" id="purchase-flight-user-input">
+          <br><br>
+          Flight Id:<br>
+          <input type="text" id="purchase-flight-flight-id-input">
+          <br><br>
+          <input type="submit" value="Submit">
+        </form> 
+        <p>Response: </p>
+        <p id="purchase-flight-response"></p>
       </div>
 
       <div class="fabric-test-box">

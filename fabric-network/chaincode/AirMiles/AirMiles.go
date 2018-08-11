@@ -29,6 +29,7 @@ type user struct {
 }
 
 type flight struct {
+	Id string `json:"Id"`
 	Airline  string `json:"Airline"`
 	Location string `json:"Location"`
 	Price    int    `json:"Price"`
@@ -80,23 +81,25 @@ func initLedger(stub shim.ChaincodeStubInterface) (string, error) {
 		Flights:      map[string]flight{},
 	}
 	flights["0"] = flight{
+		Id: "0"
 		Airline:  "Org1",
 		Location: "London",
 		Price:    500,
 	}
 	flights["1"] = flight{
+		Id: "1"
 		Airline:  "Org2",
 		Location: "Tokyo",
 		Price:    750,
 	}
 	usersAsBytes, _ := json.Marshal(users)
-	flightsAsBytes, _ := json.Marshal(users)
+	flightsAsBytes, _ := json.Marshal(flights)
 	err := stub.PutState("Users", usersAsBytes)
 	er := stub.PutState("Flights", flightsAsBytes)
 	if (err != nil) && (er != nil) {
 		return "", fmt.Errorf("Failed to intialize ledger")
 	}
-	return string(usersAsBytes), err
+	return string(flightsAsBytes), err
 }
 
 // Set stores the asset (both key and value) on the ledger. If the key exists,
@@ -123,7 +126,7 @@ func queryUser(stub shim.ChaincodeStubInterface, args []string) (string, error) 
 // Get returns the value of the specified asset key
 func queryFlight(stub shim.ChaincodeStubInterface, args []string) (string, error) {
 	if len(args) != 1 {
-		return "", fmt.Errorf("Incorrect arguments. Expecting a key")
+		return "", fmt.Errorf("Incorrect arguments. Expecting a id")
 	}
 
 	flights := map[string]flight{}
@@ -173,6 +176,65 @@ func addUser(stub shim.ChaincodeStubInterface, args []string) (string, error) {
 		return "", fmt.Errorf("Failed to set asset: %s", args[0])
 	}
 	return string(updatedUsersAsBytes), nil
+}
+
+func addFlight(stub shim.ChaincodeStubInterface, args []string) (string, error) {
+	if len(args) != 4 {
+		return "", fmt.Errorf("Incorrect arguments. Expecting four arguments (id, airline, location, price)")
+	}
+	flights := map[string]flight{}
+	flightsAsBytes := stub.GetState("Flights")
+	json.Unmarshal(flightsAsBytes, &flights)
+
+	flights[args[0]] = flight{
+		Id: args[0],
+		Airline: args[1],
+		Location: args[2],
+		Price: args[3],
+	}
+
+	updatedFlightAsBytes,_ := json.Marshal(flights)
+	err := stub.PutState("Flights", updatedFlightAsBytes)
+	if err != nil {
+		return "", fmt.Errorf("Failed to set asset: %s", args[0])
+	}
+
+	return string(updatedFlightAsBytes), nil
+}
+
+func purchaseFlight(stub shim.ChaincodeStubInterface, args []string) (string, error) {
+	if len(args) != 2 {
+		return "", fmt.Errorf("Incorrect arguments. Expecting two arguments (user name, and flight id)")
+	}
+	flightsAsBytes, _ := stub.GetState("Flights")
+	usersAsBytes,_ := stub.GetState("Users")
+
+	flights := map[string]flight{}
+	users := map[string]user{}
+
+	json.Unmarshal(flightsAsBytes, &flights)
+	json.Unmarshal(usersAsBytes, &users)
+
+	purchaser := users[ars[0]]
+	userAirlineMiles := purchaser.AirlineMiles
+	selectedFlight := flights[args[1]]
+	flightCost := selectedFlight.Price
+
+	if userAirlineMiles >= flightCost {
+		purchaser.AirlineMiles = userAirlineMiles - flightCost
+		purchaser.Flights[selectedFlight.Id] = selectedFlight
+		// Ugly workout because you cannot assign to map index's directly :(
+		users[args[0]] = purchaser
+
+		updatedUserAsBytes := json.Marshal(users)
+		err := stub.PutState("Users", updatedUserAsBytes)
+		if err != nil {
+			return "", fmt.Errorf("Failed to set asset: %s", args[0])
+		}
+		return string(updatedUserAsBytes), nil
+	} else {
+		return "", fmt.Errorf("User does not have enough funds")
+	}
 }
 
 // main function starts up the chaincode in the container during instantiate
