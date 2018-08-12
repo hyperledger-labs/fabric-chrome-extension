@@ -17,6 +17,7 @@ try {
             $('#network_url_input').val(results.networkConfig.networkURL);
             $('#orderer_url_input').val(results.networkConfig.ordererURL);
             results.networkConfig.peerURLs.map((peer) => prependPeer(peer));
+            displaySavedPeers();
         } 
     });
 } catch (error) {
@@ -52,7 +53,13 @@ const prependPeer = (peerURLs) => {
         $(this).remove();
         });
     }
-  }
+}
+
+const displaySavedPeers = () => {
+    $(".peer_list").find("li").each(function(){
+        $(this).removeClass('peer').addClass('peer saved');
+    });
+}
 
 const submitNetworkConfig = () => {
     try {
@@ -61,9 +68,10 @@ const submitNetworkConfig = () => {
         let ordererURL = $('#orderer_url_input').val();
         let peerURLs = [];
         $(".peer_list").find("li").each(function(){
-        var selected_peers = $(this).text();
+        let selected_peers = $(this).text();
         peerURLs.push(selected_peers);
         });
+        displaySavedPeers();
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
             chrome.storage.sync.set({
 				networkConfig: {

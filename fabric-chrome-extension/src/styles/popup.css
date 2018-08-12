@@ -1,8 +1,18 @@
 .peer {
     color: grey;
-  }
+}
   
-  .peer:hover { 
-    color: red;
-    text-decoration: line-through;
-  }
+.peer:hover { 
+  color: red;
+  text-decoration: line-through;
+}
+
+.peer.saved{
+  color: green;
+  font-weight: bold;
+}
+
+.peer.saved:hover { 
+  color: red;
+  text-decoration: line-through;
+}
