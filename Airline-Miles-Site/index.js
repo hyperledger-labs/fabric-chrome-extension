@@ -13,7 +13,7 @@ let queryUser = async () => { // Make Dynamic!!!!
 
         const request = {
 			//targets : --- letting this default to the peers assigned to the channel
-			chaincodeId: 'AirlineMiles',
+			chaincodeId: 'air',
 			fcn: 'queryUser',
 			args: [key],
 			chainId: 'mychannel',
@@ -34,14 +34,14 @@ let queryFlight = async () => { // Make Dynamic!!!!
 
         const request = {
 			//targets : --- letting this default to the peers assigned to the channel
-			chaincodeId: 'AirlineMiles',
+			chaincodeId: 'air',
 			fcn: 'queryFlight',
 			args: [key],
 			chainId: 'mychannel',
         };
         // const request = {
 		// 	//targets : --- letting this default to the peers assigned to the channel
-		// 	chaincodeId: 'AirlineMiles',
+		// 	chaincodeId: 'air',
 		// 	fcn: 'initLedger',
 		// 	args: [],
 		// 	chainId: 'mychannel',
@@ -62,7 +62,7 @@ let queryAllFlights = async () => { // Make Dynamic!!!!
 
         const request = {
 			//targets : --- letting this default to the peers assigned to the channel
-			chaincodeId: 'AirlineMiles',
+			chaincodeId: 'air',
 			fcn: 'queryAllFlights',
 			args: [],
 			chainId: 'mychannel',
@@ -94,25 +94,25 @@ let submitTransactionProposal = async () => {
     try {
         // const request = {
 		// 	//targets : --- letting this default to the peers assigned to the channel
-		// 	chaincodeId: 'AirlineMiles',
+		// 	chaincodeId: 'air',
 		// 	fcn: 'addUser',
 		// 	args: [key, value],
 		// 	chainId: 'mychannel',
         // };
-        const request = {
-			//targets : --- letting this default to the peers assigned to the channel
-			chaincodeId: 'AirlineMiles',
-			fcn: 'addFlight',
-			args: ['0', 'American', 'Dallas', '100'],
-			chainId: 'mychannel',
-        };
         // const request = {
-        //     	//targets : --- letting this default to the peers assigned to the channel
-        //     	chaincodeId: 'AirlineMiles',
-        //     	fcn: 'initLedger',
-        //     	args: [],
-        //     	chainId: 'mychannel',
+		// 	//targets : --- letting this default to the peers assigned to the channel
+		// 	chaincodeId: 'air',
+		// 	fcn: 'addFlight',
+		// 	args: ['j', 'American', 'Dallas', '100'],
+		// 	chainId: 'mychannel',
         // };
+        const request = {
+            	//targets : --- letting this default to the peers assigned to the channel
+            	chaincodeId: 'air',
+            	fcn: 'initLedger',
+            	args: [],
+            	chainId: 'mychannel',
+        };
        
         let response = await fabricInterface.submitTransactionProposal(request);
         let transactionReponse = await fabricInterface.submitSignedProposal(response);
@@ -129,7 +129,7 @@ let autoSubmitTransaction = async () => {
     try {
         const request = {
 			//targets : --- letting this default to the peers assigned to the channel
-			chaincodeId: 'AirlineMiles',
+			chaincodeId: 'air',
 			fcn: 'addFlight',
 			args: ['d', 'American', 'Dallas', '100'],
 			chainId: 'mychannel',
@@ -149,7 +149,7 @@ let purchaseFlight = async () => {
     try {
         const request = {
 			//targets : --- letting this default to the peers assigned to the channel
-			chaincodeId: 'AirlineMiles',
+			chaincodeId: 'air',
 			fcn: 'purchaseFlight',
 			args: [user_name, flight_id],
 			chainId: 'mychannel',
