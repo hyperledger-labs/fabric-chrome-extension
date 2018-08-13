@@ -92,13 +92,13 @@ let submitTransactionProposal = async () => {
     let key = document.getElementById('set_key_input').value;
     let value = document.getElementById('set_value_input').value;
     try {
-        // const request = {
-		// 	//targets : --- letting this default to the peers assigned to the channel
-		// 	chaincodeId: 'air',
-		// 	fcn: 'addUser',
-		// 	args: [key, value],
-		// 	chainId: 'mychannel',
-        // };
+        const request = {
+			//targets : --- letting this default to the peers assigned to the channel
+			chaincodeId: 'air',
+			fcn: 'addUser',
+			args: [key, value],
+			chainId: 'mychannel',
+        };
         // const request = {
 		// 	//targets : --- letting this default to the peers assigned to the channel
 		// 	chaincodeId: 'air',
@@ -106,13 +106,13 @@ let submitTransactionProposal = async () => {
 		// 	args: ['j', 'American', 'Dallas', '100'],
 		// 	chainId: 'mychannel',
         // };
-        const request = {
-            	//targets : --- letting this default to the peers assigned to the channel
-            	chaincodeId: 'air',
-            	fcn: 'initLedger',
-            	args: [],
-            	chainId: 'mychannel',
-        };
+        // const request = {
+        //     	//targets : --- letting this default to the peers assigned to the channel
+        //     	chaincodeId: 'air',
+        //     	fcn: 'initLedger',
+        //     	args: [],
+        //     	chainId: 'mychannel',
+        // };
        
         let response = await fabricInterface.submitTransactionProposal(request);
         let transactionReponse = await fabricInterface.submitSignedProposal(response);

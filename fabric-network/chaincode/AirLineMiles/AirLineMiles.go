@@ -62,6 +62,10 @@ func (t *AirlineMilesChaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Re
 		result, err = queryAllFlights(stub)
 	case "addUser":
 		result, err = addUser(stub, args)
+	case "addFlight":
+		result, err = addFlight(stub, args)
+	case "purchaseFlight":
+		result, err = purchaseFlight(stub, args)
 	}
 	if err != nil {
 		return shim.Error(err.Error())
@@ -193,6 +197,7 @@ func addFlight(stub shim.ChaincodeStubInterface, args []string) (string, error) 
 		Location: args[2],
 		Price:    flightPrice,
 	}
+
 	updatedFlightAsBytes, _ := json.Marshal(flights)
 	err := stub.PutState("Flights", updatedFlightAsBytes)
 	if err != nil {
