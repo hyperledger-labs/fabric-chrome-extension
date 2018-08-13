@@ -1,5 +1,66 @@
+body {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  width : 300px;
+  background-color: rgb(33,33,33);
+}
+
+.network-wrapper {
+  background-color: rgb(44,44,44);
+  border-radius: 2px;
+  box-shadow: 1px 1px 3px black;
+  color: white;
+  margin: 10px;
+  margin-left: 7%;
+  padding: 7px;
+  width: 80%;
+}
+
+.network-submit {
+  margin-left: 20%;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+
+input {
+  width: 80%;
+  font-size: 1rem;
+  color: #495057;
+  background-color: #fff;
+  border-radius: .25rem;
+  border: 1px solid #ced4da;
+  margin-bottom: 8px;
+}
+
+button {
+  padding: 4px;
+  border-radius: 3px;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  margin-top: -5px;
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+ul {
+  list-style: none;
+}
+
+li {
+  font-size: 0.7em;
+  background-color: grey;
+  border-radius: 3px;
+  padding: 5px;
+  margin: 5px;
+  width: 150px;
+}
+
 .peer {
-    color: grey;
+    color: white;
 }
   
 .peer:hover { 
@@ -8,7 +69,8 @@
 }
 
 .peer.saved{
-  color: green;
+  background-color: green;
+  color: white;
   font-weight: bold;
 }
 
@@ -16,3 +78,5 @@
   color: red;
   text-decoration: line-through;
 }
+
+
