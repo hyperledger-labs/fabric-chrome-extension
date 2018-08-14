@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Airline Miles</title>
+    <script src="index.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+  <body>
+    <div class="head-wrapper">
+      <h1>Airline Miles Website</h1>
+    </div>
+
+      <div class="fabric-test-box">
+        <p>Test querying users:</p>
+        <form id="query-user" onsubmit='queryUser();return false;'>
+          User Name:<br>
+          <input type="text" id="query-user-input">
+          <br><br>
+          <input type="submit" value="Submit">
+        </form> 
+        <p>User Info: </p>
+        <p id="query-user-response"></p>
+      </div>
+
+      <div class="fabric-test-box">
+        <p>Test querying flights:</p>
+        <form id="query" onsubmit='queryFlight();return false;'>
+          Flight Id:<br>
+          <input type="text" id="query-flight-input">
+          <br><br>
+          <input type="submit" value="Submit">
+        </form> 
+        <p>Value: </p>
+        <p id="query-flight-response"></p>
+      </div>
+
+      <div class="fabric-test-box">
+        <p>Test submitting Transaction:</p>
+        <form id="set" onsubmit='submitTransactionProposal();return false;'>
+          Key:<br>
+          <input type="text" id="set_key_input">
+          <br><br>
+          Value:<br>
+          <input type="text" id="set_value_input">
+          <br><br>
+          <input type="submit" value="Submit">
+        </form> 
+        <p>Transaction ID: </p>
+        <p id="TransactionResponse"></p>
+      </div>
+
+      <div class="fabric-test-box">
+        <p>Test AUTO submitting Transaction:</p>
+        <form id="set" onsubmit='autoSubmitTransaction();return false;'>
+          Key:<br>
+          <input type="text" id="auto_set_key_input">
+          <br><br>
+          Value:<br>
+          <input type="text" id="auto_set_value_input">
+          <br><br>
+          <input type="submit" value="Submit">
+        </form> 
+        <p>Transaction ID: </p>
+        <p id="AutoTransactionResponse"></p>
+      </div>
+
+      <div class="fabric-test-box">
+        <p>Purchase flight:</p>
+        <form id="set" onsubmit='purchaseFlight();return false;'>
+          User Name:<br>
+          <input type="text" id="purchase-flight-user-input">
+          <br><br>
+          Flight Id:<br>
+          <input type="text" id="purchase-flight-flight-id-input">
+          <br><br>
+          <input type="submit" value="Submit">
+        </form> 
+        <p>Response: </p>
+        <p id="purchase-flight-response"></p>
+      </div>
+
+      <div class="fabric-test-box">
+        <p>Initalize ledger:</p>
+        <form id="set" onsubmit='initLedger();return false;'>
+          <input type="submit" value="Submit">
+        </form> 
+        <p>Response: </p>
+        <p id="init-response"></p>
+      </div>
+
+      <div class="fabric-test-box">
+        <p>Test querying Transaction ID:</p>
+        <form id="set" onsubmit='queryTransaction();return false;'>
+          Transaction ID:<br>
+          <input type="text" id="transaction_id_input">
+          <br><br>
+          <input type="submit" value="Submit">
+        </form> 
+        <p>Transaction Data: </p>
+        <p id="TransactionData"></p>
+      </div>
+  </body>
+</html>

@@ -1,7 +1,6 @@
 document.getElementById('network_url_button').addEventListener("click", 
     (event) => { getNetworkEndpoints() });
 
-
 document.getElementById('network_reset_button').addEventListener("click", 
     (event) => { clearNetworkConfigStorage() }); 
 
@@ -17,7 +16,8 @@ try {
         if (typeof results.networkConfig.networkURL !== undefined) {
             $('#network_url_input').val(results.networkConfig.networkURL);
             $('#orderer_url_input').val(results.networkConfig.ordererURL);
-            results.networkConfig.peerURL.map((peer) => prependPeer(peer));
+            results.networkConfig.peerURLs.map((peer) => prependPeer(peer));
+            displaySavedPeers();
         } 
     });
 } catch (error) {
@@ -44,33 +44,40 @@ const submitPeer = () => {
     prependPeer(peerInput);
 }
 
-const prependPeer = (peerURL) => {
-    if (peerURL.length > 0) {
-      $('<li class="peer">').text(peerURL).prependTo('.peer_list');
+const prependPeer = (peerURLs) => {
+    if (peerURLs.length > 0) {
+      $('<li class="peer">').text(peerURLs).prependTo('.peer_list');
       //console.log('peerInput', peerInput);
       $('#peer_url_input').val('');
       $('.peer').click(function() {
         $(this).remove();
         });
     }
-  }
+}
+
+const displaySavedPeers = () => {
+    $(".peer_list").find("li").each(function(){
+        $(this).removeClass('peer').addClass('peer saved');
+    });
+}
 
 const submitNetworkConfig = () => {
     try {
         console.log('SHowing up?')
         let networkURL = $('#network_url_input').val();
         let ordererURL = $('#orderer_url_input').val();
-        let peerURL = [];
+        let peerURLs = [];
         $(".peer_list").find("li").each(function(){
-        var selected_peers = $(this).text();
-        peerURL.push(selected_peers);
+        let selected_peers = $(this).text();
+        peerURLs.push(selected_peers);
         });
+        displaySavedPeers();
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
             chrome.storage.sync.set({
 				networkConfig: {
 					networkURL: networkURL, 
 					ordererURL: ordererURL,
-					peerURL: peerURL
+					peerURLs: peerURLs
 				}
 			}, () => {
 				console.log('Stored Network Configurations');

@@ -4,32 +4,32 @@
 				<link rel="stylesheet" href="./styles/popup.css">
 			 </head>
 	<body>
-	<div>
-		<h1>Hyperledger Extension</h1>
-		
-		<br>Network url:<br>
-		<input id="network_url_input">
-		<button id='network_url_button'>set</button>
-	   <button id='network_reset_button'>Reset Network settings</button>
-		  
-		<p>Adding Peers:</p>
-		<ul class="peer_list">      
-		  </ul>
-		  
+		<div class="network-wrapper">
+			<label>Network url:</label>
+			<input id="network_url_input">
+			<button id='network_url_button'>Set</button>
+		  </div>
+		<div class="network-wrapper">
+		  <label>Orderer url:</label>
+		  <input type="text" id="orderer_url_input">
 		</div>
-		
-		 <p>Add new peer:</p>
-		
-		peer url:
-			<input type="text" id="peer_url_input" >
-		<button id='add_peer_button'>+</button>
-			<br><br>
-		
-		Orderer url:
-			<input type="text" id="orderer_url_input" >
-			<br><br>
-		<button id='submit_network_button'>Save network settings</button>
-	  </div>
+		  
+		  <div class="network-wrapper">
+		   <label>Add Peer:</label>
+		   <input type="text" id="peer_url_input">
+		  <button id='add_peer_button'>Add</button>
+		</div>
+		  
+		<div class="network-wrapper">
+		  <label>Selected Peers:</label>
+		  <ul class="peer_list"> 
+		  </ul>
+		</div>
+		 
+		 <div class="network-submit">
+		  <button id='submit_network_button'>Save Network Settings</button>
+		  <button id='network_reset_button'>Reset</button>
+		 </div>
 	  
 	  <script src="./scripts/jquery-3.3.1.min.js"></script>
 	  <script src="./scripts/popup.js"></script>

@@ -16,7 +16,7 @@
 					let RequestPayload = event.data.payload;
 					RequestPayload.networkURL = results.networkConfig.networkURL;
 					RequestPayload.ordererURL = results.networkConfig.ordererURL;
-					RequestPayload.peerURL = results.networkConfig.peerURL;
+					RequestPayload.peerURLs = results.networkConfig.peerURLs;
 
 					chrome.runtime.sendMessage({
 						type: 'content_script', 

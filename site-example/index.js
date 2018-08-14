@@ -17,6 +17,7 @@ let queryLedger = async () => { // Make Dynamic!!!!
 			args: [key],
 			chainId: 'mychannel',
         };
+
         let ledger_value = await fabricInterface.queryLedger(request);
         console.log('testing get function: ', ledger_value);
         document.getElementById('queryResponse').innerHTML = ledger_value.value;
@@ -49,7 +50,6 @@ let submitTransactionProposal = async () => {
 			args: [key, value],
 			chainId: 'mychannel',
         };
-       
         let response = await fabricInterface.submitTransactionProposal(request);
         let transactionReponse = await fabricInterface.submitSignedProposal(response);
         document.getElementById('TransactionResponse').innerHTML = transactionReponse.response;

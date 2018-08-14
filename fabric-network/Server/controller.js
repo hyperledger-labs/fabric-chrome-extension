@@ -18,18 +18,20 @@ return {
 			let anchorPeers = ['grpc://localhost:9051','grpc://localhost:7051']; // Hard coded anchor peer
 			let connection_array = await module.exports.connect_to_fabric(null, anchorPeers);
 			let channel = connection_array[0];
-			// Get network endpoints: 
-			let discovery_response = await channel.initialize({
-				discover: true, 
-				asLocalhost: true //! After deployment switch to false
-			});
-			// console.log(channel);
+			//! Get network endpoints: 
+			// let discovery_response = await channel.initialize({
+			// 	discover: true, 
+			// 	asLocalhost: true //! After deployment switch to false
+			// });
+
+			//  console.log(discovery_response);
 			// let peers = discovery_response.peers_by_org.Org1MSP.peers.map((peer) => 
 			// 		'grpc://localhost:' + peer.endpoint.split(':')[1]
 			// );
-			let orderers = discovery_response.orderers.OrdererMSP.endpoints.map((orderer) => 
-					'grpc://localhost:' + orderer.port
-			);
+			// let orderers = discovery_response.orderers.OrdererMSP.endpoints.map((orderer) => 
+			// 		'grpc://localhost:' + orderer.port
+			// );
+			let orderers = ['grpc://localhost:7050'];
 			// let networkEndpoint = {
 			// 	orderers: orderers,
 			// 	peers: peers,
@@ -45,13 +47,13 @@ return {
 		/** 
 		* Returns Channel (with configured peer) and fabric client.
 		* @param {string} ordererURL can pass in null if no orderer is needed
-		* @param {string} peerURL
+		* @param {string} peerURLs
 		* @returns [Channel, fabric_client]
 		*/
-		connect_to_fabric: async (ordererURL, peerURL) => { 
+		connect_to_fabric: async (ordererURL, peerURLs) => { 
 			let fabric_client = new Fabric_Client();
 			let channel = fabric_client.newChannel('mychannel');
-			peerURL.map((peer) => {
+			peerURLs.map((peer) => {
 				channel.addPeer(fabric_client.newPeer(peer));
 			});
 
@@ -88,20 +90,18 @@ return {
 		/** 
 		* Returns Transaction object given id.
 		* @param {string} transaction_id 'req.params.id'
-		* @param {string} peerURL        'req.body.peerURL'
+		* @param {string} peerURLs        'req.body.peerURLs'
 		* @param {string} ordererURL     'req.body.orderer'
 		* @returns {obj} transaction_query 
 		*/
 		getTransaction: async (req, res) => { 
-			let transaction_id = req.params.id;
-			let ordererURL = req.params.ordererURL;
-			let peerURL = req.params.peerURL;
-			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURL);
+			const transaction_id = req.body.id;
+			const ordererURL = req.body.ordererURL;
+			const peerURLs = req.body.peerURLs;
+			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURLs);
 			let channel = connection_array[0];
-			//TODO: Making a new peer target seems redundant. 
-			let peer = connection_array[1].newPeer(peerURL); 
 			try {
-				let transaction_query = await channel.queryTransaction(transaction_id, peer);
+				let transaction_query = await channel.queryTransaction(transaction_id);
 				res.send(transaction_query);
 			} catch (error) {
 				console.log('error: ', error);
@@ -111,17 +111,16 @@ return {
 
 		/** 
 		* User submits transaction to be signed by peers.
-		* TODO: Add orderer and peer url parameters
 		* @param {object} request    'req.body.request'
-		* @param {string} peerURL    'req.body.peerURL'
+		* @param {string} peerURLs    'req.body.peerURLs'
 		* @param {string} ordererURL 'req.body.orderer'
 		* @returns {obj}
 		*/
 		submitTransactionProposal: async (req, res) => {
 			const request = req.body.request;
 			const ordererURL = req.body.ordererURL;
-			const peerURL = req.body.peerURL;
-			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURL);
+			const peerURLs = req.body.peerURLs;
+			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURLs);
 			let channel = connection_array[0];
 			let fabric_client = connection_array[1];
 			let tx_id = fabric_client.newTransactionID();
@@ -169,7 +168,7 @@ return {
 		* along with specified network configurations. Returns transation status
 		* @param {object} signedRequest 'req.body.signedRequest'
 		* @param {object} tx_id         'req.body.tx_id'
-		* @param {string} peerURL       'req.body.peerURL'
+		* @param {string} peerURLs       'req.body.peerURLs'
 		* @param {string} ordererURL    'req.body.ordererURL'
 		*/
 		submitSignedProposal: async (req, res) => {
@@ -177,9 +176,9 @@ return {
 			const signedRequest = req.body.signedRequest;
 			const tx_id = req.body.tx_id;
 			const ordererURL = req.body.ordererURL;
-			const peerURL = req.body.peerURL;
+			const peerURLs = req.body.peerURLs;
 
-			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURL);
+			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURLs);
 			let channel = connection_array[0];
 			let fabric_client = connection_array[1];
 			
@@ -199,8 +198,36 @@ return {
 			console.log('transaction: ', transaction_id_string)
 			try {
 				let results = await channel.sendTransaction(realSignedRequest);
+				let channel_event_hub = channel.newChannelEventHub(fabric_client.newPeer('grpc://localhost:7051'));
+				channel_event_hub.registerTxEvent(transaction_id_string,
+					(tx, code) => {
+						if (code !== 'VALID') {
+							let transaction_error = 'The transaction was invalid, code = ' + code;
+							console.error(transaction_error);	
+							let jsonError = {
+								"error": transaction_error,
+							}		 
+							res.send(jsonError) // we could use reject(new Error('Problem with the tranaction, event status ::'+code));
+						} else {
+							console.log('The transaction has been committed to orderer');
+							channel_event_hub.unregisterTxEvent(transaction_id_string);
+							// Add transaction id to network response (convience)
+							results.transaction_id = transaction_id_string;
+					   		res.send(results);
+						}
+						
+					 },
+					(err) => {
+						channel_event_hub.unregisterTxEvent(transaction_id_string);
+					   console.log(util.format('Error %s! Transaction listener for %s has been ' +
+								'deregistered with %s', transaction_id_string, err, channel_event_hub.getPeerAddr()));
+						//res.send()
+					 }
+				);
+				channel_event_hub.connect();
+				   
 				console.log('Orderer Response: ', results);
-				res.send(results);
+				// res.send(results);
 			} catch (error) {
 				console.log(error);
 			}
@@ -211,15 +238,15 @@ return {
 		* Convenency function to submit request to endorsers, then submit peer response to orderer.
 		* TODO: get rid of below code, and use below abstracted methods
 		* @param {object} request    'req.body.request'
-		* @param {string} peerURL    'req.body.peerURL'
+		* @param {string} peerURLs    'req.body.peerURLs'
 		* @param {string} ordererURL 'req.body.orderer'
 		* @returns {obj}
 		*/
 		autoSubmitTransaction: async (req, res) => {  
 			const request = req.body.request;
 			const ordererURL = req.body.ordererURL;
-			const peerURL = req.body.peerURL;
-			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURL);
+			const peerURLs = req.body.peerURLs;
+			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURLs);
 			let channel = connection_array[0];
 			let fabric_client = connection_array[1];
 			let tx_id = fabric_client.newTransactionID();
@@ -253,88 +280,59 @@ return {
 				// if the transaction did not get committed within the timeout period,
 				// report a TIMEOUT status
 				let transaction_id_string = tx_id.getTransactionID(); //Get the transaction ID string to be used by the event processing
-				let promises = [];
 
-				let sendPromise = channel.sendTransaction(proposalRequest);
-				promises.push(sendPromise); //we want the send transaction first, so that we know where to check status
+				let results = await channel.sendTransaction(proposalRequest);
 
-				// get an eventhub once the fabric client has a user assigned. The user
-				// is required bacause the event registration must be signed
-				let event_hub = fabric_client.newEventHub();
-				event_hub.setPeerAddr('grpc://localhost:7053');
-
+				let channel_event_hub = channel.newChannelEventHub(fabric_client.newPeer('grpc://localhost:7051'));
 				// using resolve the promise so that result status may be processed
 				// under the then clause rather than having the catch clause process
 				// the status
-				let txPromise = new Promise((resolve, reject) => { // Needs to be cleaned up, async/await
-					let handle = setTimeout(() => {
-						event_hub.disconnect();
-						resolve({event_status : 'TIMEOUT'}); //we could use reject(new Error('Transaction did not complete within 30 seconds'));
-					}, 3000);
-					event_hub.connect();
-					event_hub.registerTxEvent(transaction_id_string, (tx, code) => {
-						// this is the callback for transaction event status
-						// first some clean up of event listener
-						clearTimeout(handle);
-						event_hub.unregisterTxEvent(transaction_id_string);
-						event_hub.disconnect();
-
-						// now let the application know what happened
-						let return_status = {event_status : code, tx_id : transaction_id_string};
+				channel_event_hub.registerTxEvent(transaction_id_string,
+					(tx, code) => {
 						if (code !== 'VALID') {
-							console.error('The transaction was invalid, code = ' + code);
-							resolve(return_status); // we could use reject(new Error('Problem with the tranaction, event status ::'+code));
+							let transaction_error = 'The transaction was invalid, code = ' + code;
+							console.error(transaction_error);	
+							let jsonError = {
+								"error": transaction_error,
+							}		 
+							res.send(jsonError) // we could use reject(new Error('Problem with the tranaction, event status ::'+code));
 						} else {
-							console.log('The transaction has been committed on peer ' + event_hub._ep._endpoint.addr);
-							resolve(return_status);
+							console.log('The transaction has been committed to orderer ');
+							channel_event_hub.unregisterTxEvent(transaction_id_string);
+							// Add transaction id to network response (convience)
+							results.transaction_id = transaction_id_string;
+					   		res.send(results);
 						}
-					}, (err) => {
-						//this is the callback if something goes wrong with the event registration or processing
-						reject(new Error('There was a problem with the eventhub ::'+err));
-					});
-				});
-				promises.push(txPromise);
-
-				let results = await Promise.all(promises);
-				} else {
-					console.error('Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...');
-					throw new Error('Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...');
+						
+					 },
+					(err) => {
+						channel_event_hub.unregisterTxEvent(transaction_id_string);
+					   console.log(util.format('Error %s! Transaction listener for %s has been ' +
+								'deregistered with %s', transaction_id_string, err, channel_event_hub.getPeerAddr()));
+						//res.send()
+					 }
+				);
+				channel_event_hub.connect();
+			} else {
+				let transaction_message = {
+					"error": 'Transaction proposals were not good',
 				}
-			
-				console.log('Send transaction promise and event listener promise have completed');
-				// check the results in the order the promises were added to the promise all list
-				if (results && results[0] && results[0][0].response.status === 200) {
-					console.log('Successfully sent transaction to the orderer.');
-					
-					res.send(JSON.stringify({'response': 'Succesfully sent transaction to the orderer', 
-						'TransactionID': tx_id.getTransactionID()}));
-				} else {
-					console.error('Failed to order the transaction. Error code: ' + results);
-				}
-			
-				// TODO: Investigate and fix why status codes are different!
-				
-				// if(results && results[1] && results[1].event_status === 'VALID') { 
-				// 	console.log('Successfully committed the change to the ledger by the peer');
-				// 	res.send(tx_id.getTransactionID());
-				// } else {
-				// 	//res.send(results[0]);
-				// 	console.log('Transaction failed to be committed to the ledger due to ::'+results[1].event_status);
-				// }
+				res.send(transaction_message);
+			}
 		},
 		
 		/** 
 		* Send key to Query Ledger
 		* @param   {object} request       'req.body.request'
-		* @param   {string} peerURL       'req.body.peerURL'
+		* @param   {string} peerURLs       'req.body.peerURLs'
 		* @param   {string} ordererURL    'req.body.ordererURL'
 		* @returns {string} value 
 		*/
 		queryLedger: async (req, res) => {
 			const request = req.body.request;
 			const ordererURL = req.body.ordererURL;
-			const peerURL = req.body.peerURL;
-			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURL);
+			const peerURLs = req.body.peerURLs;
+			let connection_array = await module.exports.connect_to_fabric(ordererURL, peerURLs);
 			let channel = connection_array[0];
 			let fabric_client = connection_array[1];
 
