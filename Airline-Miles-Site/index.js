@@ -13,7 +13,7 @@ let queryUser = async () => { // Make Dynamic!!!!
 
         const request = {
 			//targets : --- letting this default to the peers assigned to the channel
-			chaincodeId: 'air',
+			chaincodeId: 'airlineMiles',
 			fcn: 'queryUser',
 			args: [key],
 			chainId: 'mychannel',
@@ -34,14 +34,14 @@ let queryFlight = async () => { // Make Dynamic!!!!
 
         const request = {
 			//targets : --- letting this default to the peers assigned to the channel
-			chaincodeId: 'air',
+			chaincodeId: 'airlineMiles',
 			fcn: 'queryFlight',
 			args: [key],
 			chainId: 'mychannel',
         };
         // const request = {
 		// 	//targets : --- letting this default to the peers assigned to the channel
-		// 	chaincodeId: 'air',
+		// 	chaincodeId: 'airlineMiles',
 		// 	fcn: 'initLedger',
 		// 	args: [],
 		// 	chainId: 'mychannel',
@@ -62,7 +62,7 @@ let queryAllFlights = async () => { // Make Dynamic!!!!
 
         const request = {
 			//targets : --- letting this default to the peers assigned to the channel
-			chaincodeId: 'air',
+			chaincodeId: 'airlineMiles',
 			fcn: 'queryAllFlights',
 			args: [],
 			chainId: 'mychannel',
@@ -92,23 +92,23 @@ let submitTransactionProposal = async () => {
     let key = document.getElementById('set_key_input').value;
     let value = document.getElementById('set_value_input').value;
     try {
+        // const request = {
+		// 	//targets : --- letting this default to the peers assigned to the channel
+		// 	chaincodeId: 'airlineMiles',
+		// 	fcn: 'addUser',
+		// 	args: [key, value],
+		// 	chainId: 'mychannel',
+        // };
         const request = {
 			//targets : --- letting this default to the peers assigned to the channel
-			chaincodeId: 'air',
-			fcn: 'addUser',
-			args: [key, value],
+			chaincodeId: 'airlineMiles',
+			fcn: 'addFlight',
+			args: ['j', 'American', 'Dallas', '100'],
 			chainId: 'mychannel',
         };
         // const request = {
-		// 	//targets : --- letting this default to the peers assigned to the channel
-		// 	chaincodeId: 'air',
-		// 	fcn: 'addFlight',
-		// 	args: ['j', 'American', 'Dallas', '100'],
-		// 	chainId: 'mychannel',
-        // };
-        // const request = {
         //     	//targets : --- letting this default to the peers assigned to the channel
-        //     	chaincodeId: 'air',
+        //     	chaincodeId: 'airlineMiles',
         //     	fcn: 'initLedger',
         //     	args: [],
         //     	chainId: 'mychannel',
@@ -129,7 +129,7 @@ let autoSubmitTransaction = async () => {
     try {
         const request = {
 			//targets : --- letting this default to the peers assigned to the channel
-			chaincodeId: 'air',
+			chaincodeId: 'airlineMiles',
 			fcn: 'addFlight',
 			args: ['d', 'American', 'Dallas', '100'],
 			chainId: 'mychannel',
@@ -143,13 +143,31 @@ let autoSubmitTransaction = async () => {
     }
 }
 
+let initLedger = async () => {
+    try {
+        const request = {
+            	//targets : --- letting this default to the peers assigned to the channel
+            	chaincodeId: 'airlineMiles',
+            	fcn: 'initLedger',
+            	args: [],
+            	chainId: 'mychannel',
+        };
+        let response = await fabricInterface.autoSubmitTransaction(request);
+        console.log('initLedger response: ', response);
+        document.getElementById('init-response').innerHTML = response.TransactionID;
+        return response.TransactionID;
+    } catch (error) {
+        console.log('Could not find value ERROR::', error);
+    }
+}
+
 let purchaseFlight = async () => {
     let user_name = document.getElementById('purchase-flight-user-input').value;
     let flight_id = document.getElementById('purchase-flight-flight-id-input').value;
     try {
         const request = {
 			//targets : --- letting this default to the peers assigned to the channel
-			chaincodeId: 'air',
+			chaincodeId: 'airlineMiles',
 			fcn: 'purchaseFlight',
 			args: [user_name, flight_id],
 			chainId: 'mychannel',

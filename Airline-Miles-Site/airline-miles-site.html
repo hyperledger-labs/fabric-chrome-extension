@@ -80,6 +80,15 @@
       </div>
 
       <div class="fabric-test-box">
+        <p>Initalize ledger:</p>
+        <form id="set" onsubmit='initLedger();return false;'>
+          <input type="submit" value="Submit">
+        </form> 
+        <p>Response: </p>
+        <p id="init-response"></p>
+      </div>
+
+      <div class="fabric-test-box">
         <p>Test querying Transaction ID:</p>
         <form id="set" onsubmit='queryTransaction();return false;'>
           Transaction ID:<br>

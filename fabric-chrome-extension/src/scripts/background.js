@@ -54,15 +54,22 @@ var queryLedger = async(payload) => {
 }
 
 var postRequest = async(selectedFunction, payload) => {
-    const response = await fetch(`${payload.networkURL}/${selectedFunction}`, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    });
-    const content = await response.json();
-    return content;
+    try {
+        const response = await fetch(`${payload.networkURL}/${selectedFunction}`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        console.log('error is below?')
+        const content = await response.json();
+        return content;
+    } catch (error) {
+        console.log('Error with network request: ', error);
+        return error;
+    }
+   
 }
 
