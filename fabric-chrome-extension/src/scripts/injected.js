@@ -25,7 +25,6 @@ class fabricController  {
     }
 
     async submitSignedProposal(signedRequestPayload) {
-        console.log('(json) signed request: ', signedRequestPayload); 
         try {
             let requestPayload = {
                 signedRequest: signedRequestPayload.proposalRequest,

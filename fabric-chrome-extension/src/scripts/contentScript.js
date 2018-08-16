@@ -11,7 +11,6 @@
 	window.addEventListener("message", (event) => {
 		try {
 			if ((event.source === window) && event.data.type && (event.data.type === "webpage")) {
-				console.log('reading: ', event.data);
 				chrome.storage.sync.get(['networkConfig'], (results) => {
 					let RequestPayload = event.data.payload;
 					RequestPayload.networkURL = results.networkConfig.networkURL;

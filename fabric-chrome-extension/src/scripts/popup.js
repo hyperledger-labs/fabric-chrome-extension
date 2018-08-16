@@ -10,6 +10,8 @@ document.getElementById('add_peer_button').addEventListener("click",
 document.getElementById('submit_network_button').addEventListener("click", 
     (event) => { submitNetworkConfig() }); 
 
+document.getElementById('peer-add-button').addEventListener("click", 
+    (event) => { togglePeerInputDisplay() });     
 // Load stored network configurations to form.
 try {
     chrome.storage.sync.get(['networkConfig'], (results) => {
@@ -59,6 +61,10 @@ const displaySavedPeers = () => {
     $(".peer_list").find("li").each(function(){
         $(this).removeClass('peer').addClass('peer saved');
     });
+}
+
+const togglePeerInputDisplay = () => {
+    $('#peer-input-box').toggle();
 }
 
 const submitNetworkConfig = () => {
