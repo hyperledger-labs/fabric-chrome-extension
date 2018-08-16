@@ -1,10 +1,6 @@
-.outer-wrapper {
-  width: 300px;
-  height: 518px;
-  background-color: #F8F8F8;
-  border: 1px solid #979797;
+body {
+  background-color: #F7F8FE;
   font-family: 'Helvetica', 'Arial', sans-serif;
-  font-size: 12px;
 }
 .network-wrapper {
   width: 275px;
@@ -62,7 +58,7 @@
   justify-content: center;
 }
 .peer:hover { 
-  background-color: red;
+  background-color: #dc3545;
   text-decoration: line-through;
 }
 .peer.saved{
@@ -71,7 +67,7 @@
 }
 
 .peer.saved:hover { 
-  background-color: red;
+  background-color: #dc3545;
   text-decoration: line-through;
 }
 .peer-add-button {

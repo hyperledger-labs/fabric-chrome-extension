@@ -43,6 +43,7 @@ const getNetworkEndpoints = async() => {
 // console.log('Peer and Orderer detected: ', getNetworkEndpoints());
 const submitPeer = () => {
     let peerInput = $('#peer_url_input').val();
+    togglePeerInputDisplay();
     prependPeer(peerInput);
 }
 
