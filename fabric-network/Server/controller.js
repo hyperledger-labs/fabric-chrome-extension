@@ -18,6 +18,7 @@ return {
 			let anchorPeers = ['grpc://localhost:9051','grpc://localhost:7051']; // Hard coded anchor peer
 			let connection_array = await module.exports.connect_to_fabric(null, anchorPeers);
 			let channel = connection_array[0];
+			console.log(channel);
 			//! Get network endpoints: 
 			// let discovery_response = await channel.initialize({
 			// 	discover: true, 
@@ -215,23 +216,19 @@ return {
 							results.transaction_id = transaction_id_string;
 					   		res.send(results);
 						}
-						
 					 },
 					(err) => {
 						channel_event_hub.unregisterTxEvent(transaction_id_string);
 					   console.log(util.format('Error %s! Transaction listener for %s has been ' +
 								'deregistered with %s', transaction_id_string, err, channel_event_hub.getPeerAddr()));
-						//res.send()
 					 }
 				);
 				channel_event_hub.connect();
-				   
 				console.log('Orderer Response: ', results);
 				// res.send(results);
 			} catch (error) {
 				console.log(error);
 			}
-
 		},
 
 		/** 

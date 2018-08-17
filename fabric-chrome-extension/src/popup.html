@@ -4,32 +4,52 @@
 				<link rel="stylesheet" href="./styles/popup.css">
 			 </head>
 	<body>
-		<div class="network-wrapper">
-			<label>Network url:</label>
-			<input id="network_url_input">
-			<button id='network_url_button'>Set</button>
-		  </div>
-		<div class="network-wrapper">
-		  <label>Orderer url:</label>
-		  <input type="text" id="orderer_url_input">
-		</div>
-		  
-		  <div class="network-wrapper">
-		   <label>Add Peer:</label>
-		   <input type="text" id="peer_url_input">
-		  <button id='add_peer_button'>Add</button>
-		</div>
-		  
-		<div class="network-wrapper">
-		  <label>Selected Peers:</label>
-		  <ul class="peer_list"> 
-		  </ul>
-		</div>
-		 
-		 <div class="network-submit">
-		  <button id='submit_network_button'>Save Network Settings</button>
-		  <button id='network_reset_button'>Reset</button>
-		 </div>
+	
+			<div class="network-wrapper">
+				<div class="form-wrapper">
+					NetworkURL:
+					<input id="network_url_input">
+					<button id='network_url_button'>Set</button>
+				</div>
+			</div>
+				 <div class="network-wrapper-orderer">
+					<div class="form-wrapper">
+						OrdererURL:
+						<input id="orderer_url_input">
+					</div>
+				</div>
+				
+			<div class="peer-wrapper">
+				<div class="peer-inner-wrapper">
+					Peers: 
+					<div class="peer-container">
+						<ul class="peer_list">
+						</ul>
+					 
+						<div id="peer-add-button" class="peer-add-button">
+						 +
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="peer-input-box" class="network-wrapper add-peer">
+				<div class="form-wrapper">
+					Add Peer:
+					<input id="peer_url_input">
+					<button id="add_peer_button">Add</button>
+				</div>
+			</div>
+			
+			<div class="submit-button-container">
+				<button id='submit_network_button' class="button-submit">
+					Save Network Settings
+				</button>
+				<button id='network_reset_button' class="button-submit">
+					Reset
+				</button>
+			</div>
+
 	  
 	  <script src="./scripts/jquery-3.3.1.min.js"></script>
 	  <script src="./scripts/popup.js"></script>
