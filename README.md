@@ -21,11 +21,19 @@ Sheehan Anderson (srderson, sranderson@gmail.com)
 Binh Nguyen (binhn, binh1010010110@gmail.com)
 
 # Instructions
-- Clone repo with `git clone https://github.com/hyperledger-labs/fabric-chrome-extension/edit/master/README.md`
-- In the first cli tab move to the fabric-network/Server directory and run `bash startFabric.sh`
-- In the second tab in the same directory run `bash registerAdmin.sh` and then `bash registerAdmin.sh`.
+- [Install npm](https://www.npmjs.com/get-npm)
+- Clone repo with `git clone https://github.com/hyperledger-labs/fabric-chrome-extension/edit/master/README.md` to desired directory.
+- `cd fabric-network/Server`
+
+If you have Fabric 1.2 installed: 
+- `cd bash startFabric.sh`
+- In a second tab in the same directory run `bash registerAdmin.sh` and then `bash registerUser.sh`.
 - In the third tab (same location) run `nodemon server.js`.
 
+If you do not have Hyperledger Fabric Installed: 
+run `setup.sh`
+
+Install Chrome extension:
 - Go to `chrome://extensions/` and turn on Developer mode on the top right. 
 - To install chrome extension click "Load Unpacked" on the extensions page and then select `fabric-chrome-extension` folder inside this project. 
 
