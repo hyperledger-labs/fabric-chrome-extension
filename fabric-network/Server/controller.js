@@ -18,7 +18,6 @@ return {
 			let anchorPeers = ['grpc://localhost:9051','grpc://localhost:7051']; // Hard coded anchor peer
 			let connection_array = await module.exports.connect_to_fabric(null, anchorPeers);
 			let channel = connection_array[0];
-			console.log(channel);
 			//! Get network endpoints: 
 			// let discovery_response = await channel.initialize({
 			// 	discover: true, 
@@ -139,7 +138,7 @@ return {
 
 			// send the transaction proposal to the peers
 			let results = await channel.sendTransactionProposal(request);
-
+			
 			let proposalResponses = results[0];
 			let proposal = results[1];
 			let isProposalGood = false;
