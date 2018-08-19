@@ -25,5 +25,8 @@
     "scripts": ["src/scripts/background.js"],
     "persistent": true
   },
-  "web_accessible_resources": ["*.js"]
+  "web_accessible_resources": ["*.js"],
+  "icons": {
+    "16": "hyperledger-Icon.png"
+  }
 }
