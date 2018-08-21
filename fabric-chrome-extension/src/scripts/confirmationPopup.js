@@ -3,14 +3,16 @@ window.onload = () =>  {
         let payload = background.payload;
         let request = payload.request;
         let selectedFunction = background.selectedFunction;
-        document.getElementById("transaction-info").innerHTML = selectedFunction;
+        $("#transaction-type").text(selectedFunction);
         console.log('payload: ', payload);
-        let transactionElement = document.getElementById("transaction-function-info");
+        console.log($("#transaction-function").text('love it'));
+        
         if (typeof payload.request !== 'undefined') {
-            let invokeString = `${request.fcn}: ${request.args.map((arg) =>(arg +','))}`;
-            transactionElement.innerHTML = invokeString;
-            transactionElement.innerHTML += '<br>' + 'Chaincode: ' + request.chaincodeId;
-            transactionElement.innerHTML += 'Channel: ' + request.chainId;
+            $("#transaction-function").text(request.fcn);
+            let argsString = `[${request.args.map((arg) =>(arg +','))}]`;
+            $("#transaction-args").text(argsString);
+            $("#transaction-chaincode").text(request.chaincodeId);
+            $("#transaction-channel").text(request.chainId);
         } else if (typeof payload.signedRequest !== 'undefined') {
             transactionElement.innerHTML = 'Number of signed responses: ' + payload.signedRequest.proposalResponses.length;
             transactionElement.innerHTML += '<br>' + 'tx_id: ' + payload.tx_id._transaction_id;
@@ -19,8 +21,8 @@ window.onload = () =>  {
         }
 
         let peerString = payload.peerURLs.map((peer) => (peer + ','));
-        document.getElementById("peer-info").innerHTML = peerString;
-        document.getElementById("orderer-info").innerHTML = payload.ordererURL;
+        $("#transaction-peers").text(peerString);
+        $("#transaction-orderers").text(payload.ordererURL);
 
         document.getElementById("confirm-button").onclick = async () => {
             let result = await background[selectedFunction](payload);
