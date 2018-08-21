@@ -46,4 +46,5 @@ Install Chrome extension:
 
 - When changing network settings click `save network settings` on extension to save it. (Saved peers are displayed in green, not grey)
 
-- On the site, try submitting a key and value on the send transaction forms and then hit send.
+- On the example site, try submitting a key and value on the send transaction forms and then hit send.
+- Opening the console should show more information about transactions and responses. 
