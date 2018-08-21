@@ -121,3 +121,7 @@ button {
   background-color: #007bff; 
   border-color: #007bff;
 }
+
+button:hover {
+  background-color: #00b3db;
+}
