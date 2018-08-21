@@ -22,7 +22,9 @@ window.onload = () =>  {
             transactionIdString = payload.tx_id._transaction_id.slice(0,20) + '...';
             $("#transaction-args").text(transactionIdString);
         } else {
-            transactionElement.innerHTML = 'Query transaction id: ' + payload.id;
+            $('#args-label').text('TxId: ');
+            transactionIdString = payload.id.slice(0,20) + '...';
+            $("#transaction-args").text(transactionIdString);
         }
 
         let peerString = payload.peerURLs.map((peer) => (peer + ','));
