@@ -4,6 +4,7 @@ class fabricController  {
     constructor () { 
         this.info = "Hyperledger Fabric Extension";
     }
+    
     async getTransaction(id) {
         let requestPayload = {
             id: id,
