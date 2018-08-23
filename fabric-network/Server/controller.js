@@ -21,19 +21,19 @@ return {
 			let fabric_client = connection_array[1];
 
 			//! Get network endpoints: 
-			const client = fabric_client.loadFromConfig('./network-config.yaml');
-			console.log(client)
-			const newChannel = client.getChannel('mychannel');
+			// const client = fabric_client.loadFromConfig('./network-config.yaml');
+			// console.log(client)
+			// const newChannel = client.getChannel('mychannel');
 
 			//console.log(channel2)
 			//fabric_client.addConfigFile('./network-config.yaml');
 
-			let discovery_response = await newChannel.initialize({
-				discover: true, 
-				asLocalhost: true //! After deployment switch to false
-			});
+			// let discovery_response = await newChannel.initialize({
+			// 	discover: true, 
+			// 	asLocalhost: true //! After deployment switch to false
+			// });
 
-			 console.log(discovery_response);
+			//  console.log(discovery_response);
 			// let peers = discovery_response.peers_by_org.Org1MSP.peers.map((peer) => 
 			// 		'grpc://localhost:' + peer.endpoint.split(':')[1]
 			// );

@@ -86,6 +86,7 @@ class fabricController  {
     
 }
 var fabricInterface = new fabricController();
+// Some js Frameworks work better with window objects rather than injected global variables. Both are available
 window.fabricInterface = fabricInterface;
 
 

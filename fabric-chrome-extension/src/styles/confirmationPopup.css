@@ -59,14 +59,15 @@
     line-height: 27px;
     border-radius: 20px;
     border: 1px solid #979797;
-    box-shadow: 1px 1px 8px 1px #979797;
-    background-color: #D8D8D8;
     font-size: 10px;
+    color: white;
+    background-color: #007bff; 
+    border-color: #007bff;
   }
   
-  button:hover {
-    background-color: #FFFFFF
-  }
+button:hover {
+  background-color: #00b3db;
+}
   
   .loader {
       display: none;
