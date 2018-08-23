@@ -63,13 +63,11 @@ var postRequest = async(selectedFunction, payload) => {
             },
             body: JSON.stringify(payload)
         });
-        console.log('error is below?')
         const content = await response.json();
         return content;
     } catch (error) {
         console.log('Error with network request: ', error);
         return error;
     }
-   
 }
 

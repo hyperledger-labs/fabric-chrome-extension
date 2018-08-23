@@ -9,7 +9,7 @@ window.onload = () =>  {
         // Normal transaction/query
         if (typeof payload.request !== 'undefined') {
             $("#transaction-function").text(request.fcn);
-            let argsString = `[${request.args.map((arg) =>(arg +','))}]`;
+            let argsString = `[${request.args.map((arg) =>(' ' + arg))}]`;
             $("#transaction-args").text(argsString);
             $("#transaction-chaincode").text(request.chaincodeId);
             $("#transaction-channel").text(request.chainId);
@@ -27,7 +27,7 @@ window.onload = () =>  {
             $("#transaction-args").text(transactionIdString);
         }
 
-        let peerString = payload.peerURLs.map((peer) => (peer + ','));
+        let peerString = payload.peerURLs.map((peer) => (peer + ' '));
         $("#transaction-peers").text(peerString);
         $("#transaction-orderers").text(payload.ordererURL);
 
