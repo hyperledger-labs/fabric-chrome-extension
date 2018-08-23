@@ -116,7 +116,7 @@ let submitTransactionProposal = async () => {
        
         let response = await fabricInterface.submitTransactionProposal(request);
         let transactionReponse = await fabricInterface.submitSignedProposal(response);
-        document.getElementById('TransactionResponse').innerHTML = transactionReponse.response;
+        document.getElementById('TransactionResponse').innerHTML = transactionReponse;
         return transactionReponse.TransactionID;
     } catch (error) {
         console.log('Could not find value ERROR::', error);
@@ -136,7 +136,7 @@ let autoSubmitTransaction = async () => {
         };
         let response = await fabricInterface.autoSubmitTransaction(request);
         console.log('Auto submit transaction response: ', response);
-        document.getElementById('AutoTransactionResponse').innerHTML = response.TransactionID;
+        document.getElementById('AutoTransactionResponse').innerHTML = response.status;
         return response.TransactionID;
     } catch (error) {
         console.log('Could not find value ERROR::', error);

@@ -1,15 +1,87 @@
 <!doctype html>
 <div>
+        <head>
+                <link rel="stylesheet" href="./styles/confirmationPopup.css">
+        </head>
 	<body>
+        <script src="./scripts/jquery-3.3.1.min.js"></script>
         <script src="./scripts/confirmationPopup.js"></script>
-        <h1>Do you wish to send transaction:</h1>
-        <p id="transaction-info"></p>
 
-        <div id="transaction-function-info"></div>
-        
+        <div class="popup-confirmation-outer-wrapper">
+  
+                <div class="popup-confirmation-header">
+                        <h1>Confirm Transaction:</h1>
+                </div>
 
-        Sending to peers: <p id="peer-info"></p>
-        Using orderer: <p id="orderer-info"></p>
-        <button id="confirm-button">Confirm</button>
+                <div class="popup-confirmation-transaction-wrapper">
+                
+                <div class="popup-confirmation-content">
+                        <span class="popup-confirmation-transaction-label">
+                                <div id="transaction-type"> </div>
+                        </span>
+                </div>
+                
+                <hr>
+
+                <div class="popup-confirmation-content">
+                        <span class="popup-confirmation-transaction-label" id="function-label">Function: </span>
+                        <span class="popup-confirmation-transaction-data">
+                                <div id="transaction-function"> </div> 
+                        </span>
+                </div>
+                
+                <hr>
+                
+                <div class="popup-confirmation-content">
+                        <span class="popup-confirmation-transaction-label" id="args-label">Args: </span>
+                        <span class="popup-confirmation-transaction-data">
+                        <div id="transaction-args"> </div>
+                        </span>
+                </div>
+                <hr>
+                
+                <div class="popup-confirmation-content">
+                        <span class="popup-confirmation-transaction-label">Chaincode: </span>
+                        <span class="popup-confirmation-transaction-data"> 
+                                <div id="transaction-chaincode"> </div> 
+                        </span>
+                </div>
+                
+                <hr>
+                
+                <div class="popup-confirmation-content">
+                        <span class="popup-confirmation-transaction-label">Channel: </span>
+                        <span class="popup-confirmation-transaction-data">
+                        <div id="transaction-channel"> </div>
+                        </span>
+                </div>
+                
+                <hr>
+                
+                <div class="popup-confirmation-content">
+                        <span class="popup-confirmation-transaction-label">Sending to peers: </span>
+                        <span class="popup-confirmation-transaction-data">
+                        <div id="transaction-peers"> </div>
+                        </span>
+                </div>
+                
+                <hr>
+                
+                <div class="popup-confirmation-content">
+                        <span class="popup-confirmation-transaction-label">Using orderer: </span>
+                        <span class="popup-confirmation-transaction-data">
+                        <div id="transaction-orderers"> </div>
+                        </span>
+                </div>
+                
+                <div class="popup-confirmation-button-wrapper">
+                        <button id="confirm-button">Submit</button>
+                </div>
+                
+                <div class="loader" id="loading-circle"></div>
+                
+              </div>
+            
+            </div>
 	</body>
 </div>

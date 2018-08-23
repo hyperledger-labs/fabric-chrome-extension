@@ -18,9 +18,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 tabId: tab.id,
                 type: 'popup',
                 focused: true,
-                height: 312, 
-                width: 268,
-                left: 1100
+                height: 490, 
+                width: 350,
+                left: 1000
             });
         });
        return true; // To insure background stays active until popup is clicked.
@@ -63,13 +63,11 @@ var postRequest = async(selectedFunction, payload) => {
             },
             body: JSON.stringify(payload)
         });
-        console.log('error is below?')
         const content = await response.json();
         return content;
     } catch (error) {
         console.log('Error with network request: ', error);
         return error;
     }
-   
 }
 

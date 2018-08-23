@@ -4,6 +4,7 @@ class fabricController  {
     constructor () { 
         this.info = "Hyperledger Fabric Extension";
     }
+    
     async getTransaction(id) {
         let requestPayload = {
             id: id,
@@ -18,6 +19,7 @@ class fabricController  {
                 request: request,
             };
             let result = await this.sendMessage('submitTransactionProposal', requestPayload);
+            console.log('Proposal Response: ', result);
             return result.response;
         } catch (error) {
             console.log('Could not submit transaction proposal ERROR::', error);
@@ -31,8 +33,8 @@ class fabricController  {
                 tx_id: signedRequestPayload.tx_id,
             };
             let result = await this.sendMessage('submitSignedProposal', requestPayload);
-            console.log('signed result: ', result);
-            return result;
+            console.log('Signed result: ', result);
+            return result.response;
         } catch (error) {
             console.log('Could not submit transaction ERROR::', error);
         } 
@@ -44,11 +46,11 @@ class fabricController  {
         }; 
         try {
             let result = await this.sendMessage('autoSubmitTransaction', requestPayload);
+            console.log('Signed result: ', result.response);
             return result.response;
         } catch (error) {
             console.log('Could not find item ERROR::', error);
         }
-        
     }
 
     async queryLedger(request) {
@@ -57,11 +59,16 @@ class fabricController  {
         }; 
         try {
             let result = await this.sendMessage('queryLedger', requestPayload);
-            return result.response;
+            return this.convertResponseToJson(result);
         } catch (error) {
             console.log('Could not find item ERROR::', error);
         }
     }
+
+    convertResponseToJson(result) {
+        return JSON.parse(String(result.response.value));
+    }
+
     async sendMessage(function_name, payload) {
         let message = { 
             type: 'webpage', 
@@ -78,7 +85,8 @@ class fabricController  {
     }
     
 }
-let fabricInterface = new fabricController();
+var fabricInterface = new fabricController();
+window.fabricInterface = fabricInterface;
 
 
 
