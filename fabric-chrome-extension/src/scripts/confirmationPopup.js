@@ -21,6 +21,7 @@ window.onload = () =>  {
             $('#args-label').text('TxId: ');
             transactionIdString = payload.tx_id._transaction_id.slice(0,20) + '...';
             $("#transaction-args").text(transactionIdString);
+        // Querying transaction by id:
         } else {
             $('#args-label').text('TxId: ');
             transactionIdString = payload.id.slice(0,20) + '...';
