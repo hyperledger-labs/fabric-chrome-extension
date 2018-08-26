@@ -18,7 +18,8 @@
 					RequestPayload.peerURLs = results.networkConfig.peerURLs;
 
 					chrome.runtime.sendMessage({
-						type: 'content_script', 
+						type: 'content_script',
+						id: event.data.id,
 						function: event.data.function,
 						payload: RequestPayload
 					}, (response) => {

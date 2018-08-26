@@ -2,6 +2,7 @@ window.onload = () =>  {
     chrome.runtime.getBackgroundPage(async (background)=> {
         let payload = background.payload;
         let request = payload.request;
+        let id = background.id;
         let selectedFunction = background.selectedFunction;
         $("#transaction-type").text(selectedFunction);
         console.log('payload: ', payload);
@@ -39,6 +40,7 @@ window.onload = () =>  {
             console.log('query result: ', result);
             background.sendResponse({
                 type: 'background',
+                id: id,
                 function: selectedFunction,
                 response: result
             });

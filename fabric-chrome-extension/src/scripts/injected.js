@@ -70,15 +70,18 @@ class fabricController  {
     }
 
     async sendMessage(function_name, payload) {
+        // giving transaction message a random id similar to a hash to safely allow multiple transactions at once. 
+        let randomId = Math.random().toString(36).substring(7);
         let message = { 
-            type: 'webpage', 
+            type: 'webpage',
+            id: randomId, 
             function: function_name,
             payload: payload	
         }
         window.postMessage(message, '*');
         // Listen to messages from contentScript.js:
         const readMessage = () => new Promise(resolve => window.addEventListener('message', (event) => {
-            if (event.data.type === "background") resolve(event.data); 
+            if ((event.data.type === "background") && (event.data.id === randomId)) resolve(event.data); 
         }));
         let result = await readMessage();
         return result;
