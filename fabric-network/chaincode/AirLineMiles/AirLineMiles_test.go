@@ -27,14 +27,14 @@ func TestInvokeInit(t *testing.T) {
 	}
 
 	// here we validate we can retrieve the vehiclePart object we just committed by serianNumber
-	// valAsbytes, err := stub.GetState("Flights")
-	// if err != nil {
-	// 	t.Errorf("Failed to get state for " + "Flights")
-	// } else if valAsbytes == nil {
-	// 	t.Errorf("Flight does not exist: " + "Flights")
-	// }
+	valAsbytes, err := stub.GetState("Flights")
+	if err != nil {
+		t.Errorf("Failed to get state for " + "Flights")
+	} else if valAsbytes == nil {
+		t.Errorf("Flight does not exist: " + "Flights")
+	}
 
-	// fmt.Println(string(valAsbytes))
+	fmt.Println(string(valAsbytes))
 
 	result_purchase_flight := stub.MockInvoke("0.01",
 		[][]byte{[]byte("purchaseFlight"),
