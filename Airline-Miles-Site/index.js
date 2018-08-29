@@ -103,7 +103,7 @@ let submitTransactionProposal = async () => {
 			//targets : --- letting this default to the peers assigned to the channel
 			chaincodeId: 'airlineMiles',
 			fcn: 'addFlight',
-			args: ['j', 'American', 'Dallas', '100'],
+			args: ['5', "8/27/18", 'American', 'Tokyo', 'Dallas', '100'],
 			chainId: 'mychannel',
         };
         // const request = {
@@ -131,7 +131,7 @@ let autoSubmitTransaction = async () => {
 			//targets : --- letting this default to the peers assigned to the channel
 			chaincodeId: 'airlineMiles',
 			fcn: 'addFlight',
-			args: ['d', 'American', 'Dallas', '100'],
+			args: ['5', "8/27/18",'American', 'Tokyo', 'Dallas', '100'],
 			chainId: 'mychannel',
         };
         let response = await fabricInterface.autoSubmitTransaction(request);

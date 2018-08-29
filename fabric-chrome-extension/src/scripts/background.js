@@ -7,23 +7,37 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         window.sendResponse = sendResponse;
         window.payload = payload;
         window.selectedFunction = request.function;
-        //TODO: Add a conditional based on user settings
-        //TODO: That would let a bypass of popup confirmation
-        chrome.tabs.create({
-            url: chrome.extension.getURL('src/confirmationPopup.html'),
-            active: false
-        }, (tab) => {
-            // After the tab has been created, open a window to inject the tab
-            chrome.windows.create({
-                tabId: tab.id,
-                type: 'popup',
-                focused: true,
-                height: 490, 
-                width: 350,
-                left: 1000
+        window.id = request.id;
+        //! Temparary bypass for querying ledger without requiring user confirmation
+        //! Only for demo, remove after!!
+        if (request.function === 'queryLedger') {
+            queryLedger(payload).then((result) => {
+                console.log('query result heree: ', result);
+                sendResponse({
+                    type: 'background',
+                    id: request.id,
+                    function: request.function,
+                    response: result
+                });
             });
-        });
-       return true; // To insure background stays active until popup is clicked.
+            return true;
+        } else {
+            chrome.tabs.create({
+                url: chrome.extension.getURL('src/confirmationPopup.html'),
+                active: false
+            }, (tab) => {
+                // After the tab has been created, open a window to inject the tab
+                chrome.windows.create({
+                    tabId: tab.id,
+                    type: 'popup',
+                    focused: true,
+                    height: 490, 
+                    width: 350,
+                    left: 1000
+                });
+            });
+            return true; // To insure background stays active until popup is clicked.
+        }
     }
 }); 
 // Using var instead of let because these need to be global variables

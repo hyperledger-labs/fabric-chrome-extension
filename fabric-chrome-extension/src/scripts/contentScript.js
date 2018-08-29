@@ -10,7 +10,7 @@
 	// Listen to to injected.js then send => background.js
 	window.addEventListener("message", (event) => {
 		try {
-			if ((event.source === window) && event.data.type && (event.data.type === "webpage")) {
+			if ((event.source === window) && (typeof event.data.type !== 'undefined') && (event.data.type === "webpage")) {
 				chrome.storage.sync.get(['networkConfig'], (results) => {
 					let RequestPayload = event.data.payload;
 					RequestPayload.networkURL = results.networkConfig.networkURL;
@@ -18,7 +18,8 @@
 					RequestPayload.peerURLs = results.networkConfig.peerURLs;
 
 					chrome.runtime.sendMessage({
-						type: 'content_script', 
+						type: 'content_script',
+						id: event.data.id,
 						function: event.data.function,
 						payload: RequestPayload
 					}, (response) => {

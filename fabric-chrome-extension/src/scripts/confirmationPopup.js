@@ -2,6 +2,7 @@ window.onload = () =>  {
     chrome.runtime.getBackgroundPage(async (background)=> {
         let payload = background.payload;
         let request = payload.request;
+        let id = background.id;
         let selectedFunction = background.selectedFunction;
         $("#transaction-type").text(selectedFunction);
         console.log('payload: ', payload);
@@ -21,6 +22,7 @@ window.onload = () =>  {
             $('#args-label').text('TxId: ');
             transactionIdString = payload.tx_id._transaction_id.slice(0,20) + '...';
             $("#transaction-args").text(transactionIdString);
+        // Querying transaction by id:
         } else {
             $('#args-label').text('TxId: ');
             transactionIdString = payload.id.slice(0,20) + '...';
@@ -38,6 +40,7 @@ window.onload = () =>  {
             console.log('query result: ', result);
             background.sendResponse({
                 type: 'background',
+                id: id,
                 function: selectedFunction,
                 response: result
             });

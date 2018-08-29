@@ -30,8 +30,10 @@ type user struct {
 
 type flight struct {
 	Id       string `json:"Id"`
+	Date     string `json:"Date"`
 	Airline  string `json:"Airline"`
 	Location string `json:"Location"`
+	From     string `json:"From"`
 	Price    int    `json:"Price"`
 }
 
@@ -86,15 +88,35 @@ func initLedger(stub shim.ChaincodeStubInterface) (string, error) {
 	}
 	flights["0"] = flight{
 		Id:       "0",
+		Date:     "8/27/18",
 		Airline:  "Org1",
 		Location: "London",
+		From:     "Dallas",
 		Price:    500,
 	}
 	flights["1"] = flight{
 		Id:       "1",
+		Date:     "8/27/18",
 		Airline:  "Org2",
 		Location: "Tokyo",
+		From:     "Dallas",
 		Price:    750,
+	}
+	flights["2"] = flight{
+		Id:       "2",
+		Date:     "8/27/18",
+		Airline:  "Org1",
+		Location: "Madrid",
+		From:     "Dallas",
+		Price:    1000,
+	}
+	flights["3"] = flight{
+		Id:       "3",
+		Date:     "8/27/18",
+		Airline:  "Org2",
+		Location: "Berlin",
+		From:     "Dallas",
+		Price:    950,
 	}
 	usersAsBytes, _ := json.Marshal(users)
 	flightsAsBytes, _ := json.Marshal(flights)
@@ -183,18 +205,20 @@ func addUser(stub shim.ChaincodeStubInterface, args []string) (string, error) {
 }
 
 func addFlight(stub shim.ChaincodeStubInterface, args []string) (string, error) {
-	if len(args) != 4 {
-		return "", fmt.Errorf("Incorrect arguments. Expecting four arguments (id, airline, location, price)")
+	if len(args) != 6 {
+		return "", fmt.Errorf("Incorrect arguments. Expecting five arguments (id, date, airline, location, origin city, and price)")
 	}
-	flightPrice, _ := strconv.Atoi(args[3])
+	flightPrice, _ := strconv.Atoi(args[5])
 	flights := map[string]flight{}
 	flightsAsBytes, _ := stub.GetState("Flights")
 	json.Unmarshal(flightsAsBytes, &flights)
 
 	flights[args[0]] = flight{
 		Id:       args[0],
-		Airline:  args[1],
-		Location: args[2],
+		Date:     args[1],
+		Airline:  args[2],
+		Location: args[3],
+		From:     args[4],
 		Price:    flightPrice,
 	}
 
